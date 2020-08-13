@@ -27,7 +27,7 @@ pack: build
 	$(SET_BRANCH)
 	$(SET_VERSION)
 	echo Create archive \"$(PROJECT_NAME)-$(VERSION)-$(BRANCH).tar.gz\"
-	tar czf $(PROJECT_NAME)-$(VERSION)-$(BRANCH).tar.gz .
+	tar czf $(PROJECT_NAME)-$(VERSION)-$(BRANCH).tar.gz monitoring_tools
 
 build:
 	# required section
