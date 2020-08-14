@@ -27,7 +27,7 @@ pack: build
 	$(SET_BRANCH)
 	$(SET_VERSION)
 	echo Create archive \"$(PROJECT_NAME)-$(VERSION)-$(BRANCH).tar.gz\"
-	tar czf $(PROJECT_NAME)-$(VERSION)-$(BRANCH).tar.gz monitoring_tools
+	tar czf $(PROJECT_NAME)-$(VERSION)-$(BRANCH).tar.gz monitoring_tools docs
 
 build:
 	# required section
@@ -39,6 +39,6 @@ clean:
 	$(SET_PROJECT_NAME)
 	rm -rf $(PROJECT_NAME)-*.tar.gz
 
-test: $(PROJECT_NAME)/node_modules
+test:
 	# required section
 	echo "Testing..."
