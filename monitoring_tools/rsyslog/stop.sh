@@ -1,3 +1,4 @@
 #!/bin/bash
 
-kill `ps ax | grep "rsyslogd -f rsyslog.conf -i /opt/otp/rsyslog/pid/rsyslogd.pid" | grep -v grep | awk '{print $1}'`
+rsyslogDir="$(dirname $(readlink -f $0))"
+kill `ps ax | grep "rsyslogd -f rsyslog.conf -i $rsyslogDir/pid/rsyslogd.pid" | grep -v grep | awk '{print $1}'`
