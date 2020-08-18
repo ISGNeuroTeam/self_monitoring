@@ -1,0 +1,14 @@
+$ModLoad imfile
+$InputFileName /opt/otp/tmp/*/driver*/stderr
+$InputFileTag tag=sprk_driver:
+$InputFileSeverity info
+$InputFileFacility local5
+$InputRunFileMonitor
+$InputFilePollInterval 1
+
+$template noTimestampFormat,"%msg%\n"
+$ActionFileDefaultTemplate noTimestampFormat
+$ActionForwardDefaultTemplate noTimestampFormat 
+local5.*  @@192.168.4.194:1027
+
+
