@@ -45,7 +45,7 @@ INSERT INTO "group" (name, color)
     WHERE NOT EXISTS (
         SELECT 1 FROM "group" WHERE name='Logs'
     );
-
+-- Insert data to tables for user admin
 INSERT INTO dash_group (dash_id, group_id)
 
     select dash.id as dash_id,"group".id as group_id from dash,"group"  
@@ -57,6 +57,19 @@ INSERT INTO dash_group (dash_id, group_id)
 --
 
 
+INSERT INTO index_group (index_id, group_id)
+
+    select index.id as index_id, "group".id as group_id from index,"group" where index.name='*' and "group".name='Logs' and 
+    NOT EXISTS (
+        SELECT index_id, group_id FROM index_group WHERE group_id=(select id from "group" where name='Logs')
+    ) returning index_id;
+
+
+ INSERT INTO user_group (user_id, group_id)
+    select role.id as user_id, "group".id as group_id from role,"group" where role.name='admin' and "group".name='Logs' and 
+    not EXISTS (
+        SELECT user_id, group_id FROM user_group WHERE group_id=(select id from "group" where name='Logs')
+    ) ;
 
 --
 -- PostgreSQL database dump complete
