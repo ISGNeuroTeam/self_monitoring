@@ -18,9 +18,10 @@ All files can be copied by deploy.sh script or manually:
 ```
 cp monitoring_tools/nifi /opt/otp/nifi/conf
 cp monitoring_tools/rsyslog /opt/otp/self_moniroring/
+
 ```
 
-Dashboards can be restored from eva/sql or imported.
+Dashboards can be restored from eva/dashboards.sql (`psql -h localhost -U dispatcher eva < eva/dashboards.sql`) or imported.
 
 ## Running the tests
 
