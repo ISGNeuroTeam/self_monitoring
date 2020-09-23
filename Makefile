@@ -7,7 +7,6 @@ Required section:
 Addition section:
 endef
 
-
 PROJECT_NAME = monitoring
 
 GENERATE_VERSION = 1.0.0
