@@ -40,11 +40,12 @@ INSERT INTO dash (name, body, modified) select 'Spark_driver', '{"name":"Spark_d
 --
 -- Data for Name: dash_group; Type: TABLE DATA; Schema: public; Owner: dispatcher
 --
-INSERT INTO "group" (name, color) 
-    SELECT 'Logs', '#2E0DA4FF'
+INSERT INTO "group" (id, name, color) 
+    SELECT nextval('group_id_seq')+1, 'Logs', '#2E0DA4FF'
     WHERE NOT EXISTS (
         SELECT 1 FROM "group" WHERE name='Logs'
-    );
+    ) returning name;
+
 -- Insert data to tables for user admin
 INSERT INTO dash_group (dash_id, group_id)
 
