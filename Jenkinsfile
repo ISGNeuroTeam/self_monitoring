@@ -13,6 +13,7 @@ pipeline {
         stage ('Build'){
             steps{
                 sh '''
+		      make build
                       make pack '''
             }
 
