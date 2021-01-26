@@ -8,7 +8,7 @@ Copy project to the OT.Platform devkit directory.
 
 ### Prerequisites
 
-It is an addition to the devkit,copy files from monitoring_tools directory to corresponding directory in devkit. 
+It is an addition to the devkit;copy files from monitoring_tools directory to corresponding directory in devkit. 
 
 
 ### Installing
@@ -22,10 +22,6 @@ cp monitoring_tools/rsyslog /opt/otp/self_moniroring/
 ```
 
 Dashboards can be restored from eva/dashboards.sql (`psql -h localhost -U dispatcher eva < eva/dashboards.sql`) or imported.
-
-## Running the tests
-
-## Contributing
 
 
 ## Authors
