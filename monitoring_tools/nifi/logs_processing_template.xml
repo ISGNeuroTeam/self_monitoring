@@ -2,7 +2,7 @@
 <template encoding-version="1.3">
     <description></description>
     <groupId>38410f93-016f-1000-cd6b-8a6103949ccf</groupId>
-    <name>Logs processing processor</name>
+    <name>Logs processing</name>
     <snippet>
         <processGroups>
             <id>dacb53d2-18a8-3ff4-0000-000000000000</id>
@@ -527,7 +527,7 @@ sourcetype</label>
             <bundle>
                 <artifact>nifi-standard-nar</artifact>
                 <group>org.apache.nifi</group>
-                <version>1.11.1</version>
+                <version>1.15.1</version>
             </bundle>
             <config>
                 <bulletinLevel>WARN</bulletinLevel>
@@ -619,6 +619,12 @@ sourcetype</label>
                         </value>
                     </entry>
                     <entry>
+                        <key>extract-text-enable-named-groups</key>
+                        <value>
+                            <name>extract-text-enable-named-groups</name>
+                        </value>
+                    </entry>
+                    <entry>
                         <key>_raw</key>
                         <value>
                             <name>_raw</name>
@@ -686,6 +692,10 @@ sourcetype</label>
                         <value>false</value>
                     </entry>
                     <entry>
+                        <key>extract-text-enable-named-groups</key>
+                        <value>false</value>
+                    </entry>
+                    <entry>
                         <key>_raw</key>
                         <value>(.*)</value>
                     </entry>
@@ -719,7 +729,7 @@ sourcetype</label>
             <bundle>
                 <artifact>nifi-standard-nar</artifact>
                 <group>org.apache.nifi</group>
-                <version>1.11.1</version>
+                <version>1.15.1</version>
             </bundle>
             <config>
                 <bulletinLevel>WARN</bulletinLevel>
@@ -787,7 +797,7 @@ sourcetype</label>
             <bundle>
                 <artifact>nifi-standard-nar</artifact>
                 <group>org.apache.nifi</group>
-                <version>1.11.1</version>
+                <version>1.15.1</version>
             </bundle>
             <config>
                 <bulletinLevel>WARN</bulletinLevel>
@@ -875,6 +885,11 @@ sourcetype</label>
             <type>org.apache.nifi.processors.standard.ExecuteProcess</type>
         </processors>
     </contents>
+    <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+    <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+    <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+    <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+    <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
     <name>Log info about disk space</name>
     <variables/>
 </processGroups>
@@ -888,7 +903,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -1004,7 +1019,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -1027,6 +1042,12 @@ sourcetype</label>
                 <key>Rolling Filename Pattern</key>
                 <value>
                     <name>Rolling Filename Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>
+                    <name>Post-Rollover Tail Period</name>
                 </value>
             </entry>
             <entry>
@@ -1065,6 +1086,31 @@ sourcetype</label>
                     <name>tailfile-maximum-age</name>
                 </value>
             </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>
+                    <name>reread-on-nul</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+                <value>
+                    <dependencies>
+                        <dependentValues>Single file</dependentValues>
+                        <propertyName>tail-mode</propertyName>
+                    </dependencies>
+                    <name>Line Start Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>
+                    <dependencies>
+                        <propertyName>Line Start Pattern</propertyName>
+                    </dependencies>
+                    <name>Max Buffer Size</name>
+                </value>
+            </entry>
         </descriptors>
         <executionNode>ALL</executionNode>
         <lossTolerant>false</lossTolerant>
@@ -1081,6 +1127,10 @@ sourcetype</label>
             <entry>
                 <key>Rolling Filename Pattern</key>
                 <value>${filename}.log.*</value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>0 sec</value>
             </entry>
             <entry>
                 <key>tail-base-directory</key>
@@ -1105,6 +1155,17 @@ sourcetype</label>
             <entry>
                 <key>tailfile-maximum-age</key>
                 <value>24 hours</value>
+            </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>false</value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>64 KB</value>
             </entry>
         </properties>
         <runDurationMillis>0</runDurationMillis>
@@ -1132,7 +1193,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -1155,6 +1216,12 @@ sourcetype</label>
                 <key>Rolling Filename Pattern</key>
                 <value>
                     <name>Rolling Filename Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>
+                    <name>Post-Rollover Tail Period</name>
                 </value>
             </entry>
             <entry>
@@ -1193,6 +1260,31 @@ sourcetype</label>
                     <name>tailfile-maximum-age</name>
                 </value>
             </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>
+                    <name>reread-on-nul</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+                <value>
+                    <dependencies>
+                        <dependentValues>Single file</dependentValues>
+                        <propertyName>tail-mode</propertyName>
+                    </dependencies>
+                    <name>Line Start Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>
+                    <dependencies>
+                        <propertyName>Line Start Pattern</propertyName>
+                    </dependencies>
+                    <name>Max Buffer Size</name>
+                </value>
+            </entry>
         </descriptors>
         <executionNode>ALL</executionNode>
         <lossTolerant>false</lossTolerant>
@@ -1209,6 +1301,10 @@ sourcetype</label>
             <entry>
                 <key>Rolling Filename Pattern</key>
                 <value>${filename}.log.*</value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>0 sec</value>
             </entry>
             <entry>
                 <key>tail-base-directory</key>
@@ -1233,6 +1329,17 @@ sourcetype</label>
             <entry>
                 <key>tailfile-maximum-age</key>
                 <value>24 hours</value>
+            </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>false</value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>64 KB</value>
             </entry>
         </properties>
         <runDurationMillis>0</runDurationMillis>
@@ -1260,7 +1367,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -1283,6 +1390,12 @@ sourcetype</label>
                 <key>Rolling Filename Pattern</key>
                 <value>
                     <name>Rolling Filename Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>
+                    <name>Post-Rollover Tail Period</name>
                 </value>
             </entry>
             <entry>
@@ -1321,6 +1434,31 @@ sourcetype</label>
                     <name>tailfile-maximum-age</name>
                 </value>
             </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>
+                    <name>reread-on-nul</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+                <value>
+                    <dependencies>
+                        <dependentValues>Single file</dependentValues>
+                        <propertyName>tail-mode</propertyName>
+                    </dependencies>
+                    <name>Line Start Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>
+                    <dependencies>
+                        <propertyName>Line Start Pattern</propertyName>
+                    </dependencies>
+                    <name>Max Buffer Size</name>
+                </value>
+            </entry>
         </descriptors>
         <executionNode>ALL</executionNode>
         <lossTolerant>false</lossTolerant>
@@ -1337,6 +1475,10 @@ sourcetype</label>
             <entry>
                 <key>Rolling Filename Pattern</key>
                 <value>${filename}.log.*</value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>0 sec</value>
             </entry>
             <entry>
                 <key>tail-base-directory</key>
@@ -1362,6 +1504,17 @@ sourcetype</label>
                 <key>tailfile-maximum-age</key>
                 <value>24 hours</value>
             </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>false</value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>64 KB</value>
+            </entry>
         </properties>
         <runDurationMillis>0</runDurationMillis>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -1379,6 +1532,11 @@ sourcetype</label>
     <type>org.apache.nifi.processors.standard.TailFile</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>glusterfs client log</name>
                             <variables/>
                         </processGroups>
@@ -1580,7 +1738,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -1666,7 +1824,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -1736,7 +1894,7 @@ sourcetype</label>
             </entry>
             <entry>
                 <key>host</key>
-                <value>${hostname}</value>
+                <value>${hostname()}</value>
             </entry>
             <entry>
                 <key>index</key>
@@ -1772,7 +1930,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -1858,7 +2016,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -1881,6 +2039,12 @@ sourcetype</label>
                 <key>Rolling Filename Pattern</key>
                 <value>
                     <name>Rolling Filename Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>
+                    <name>Post-Rollover Tail Period</name>
                 </value>
             </entry>
             <entry>
@@ -1919,6 +2083,31 @@ sourcetype</label>
                     <name>tailfile-maximum-age</name>
                 </value>
             </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>
+                    <name>reread-on-nul</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+                <value>
+                    <dependencies>
+                        <dependentValues>Single file</dependentValues>
+                        <propertyName>tail-mode</propertyName>
+                    </dependencies>
+                    <name>Line Start Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>
+                    <dependencies>
+                        <propertyName>Line Start Pattern</propertyName>
+                    </dependencies>
+                    <name>Max Buffer Size</name>
+                </value>
+            </entry>
         </descriptors>
         <executionNode>ALL</executionNode>
         <lossTolerant>false</lossTolerant>
@@ -1935,6 +2124,10 @@ sourcetype</label>
             <entry>
                 <key>Rolling Filename Pattern</key>
                 <value>nifi-user.*</value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>0 sec</value>
             </entry>
             <entry>
                 <key>tail-base-directory</key>
@@ -1959,6 +2152,17 @@ sourcetype</label>
             <entry>
                 <key>tailfile-maximum-age</key>
                 <value>24 hours</value>
+            </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>false</value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>64 KB</value>
             </entry>
         </properties>
         <runDurationMillis>0</runDurationMillis>
@@ -1986,7 +2190,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -2009,6 +2213,12 @@ sourcetype</label>
                 <key>Rolling Filename Pattern</key>
                 <value>
                     <name>Rolling Filename Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>
+                    <name>Post-Rollover Tail Period</name>
                 </value>
             </entry>
             <entry>
@@ -2047,6 +2257,31 @@ sourcetype</label>
                     <name>tailfile-maximum-age</name>
                 </value>
             </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>
+                    <name>reread-on-nul</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+                <value>
+                    <dependencies>
+                        <dependentValues>Single file</dependentValues>
+                        <propertyName>tail-mode</propertyName>
+                    </dependencies>
+                    <name>Line Start Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>
+                    <dependencies>
+                        <propertyName>Line Start Pattern</propertyName>
+                    </dependencies>
+                    <name>Max Buffer Size</name>
+                </value>
+            </entry>
         </descriptors>
         <executionNode>ALL</executionNode>
         <lossTolerant>false</lossTolerant>
@@ -2063,6 +2298,10 @@ sourcetype</label>
             <entry>
                 <key>Rolling Filename Pattern</key>
                 <value>nifi-app.*</value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>0 sec</value>
             </entry>
             <entry>
                 <key>tail-base-directory</key>
@@ -2088,6 +2327,17 @@ sourcetype</label>
                 <key>tailfile-maximum-age</key>
                 <value>24 hours</value>
             </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>false</value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>64 KB</value>
+            </entry>
         </properties>
         <runDurationMillis>0</runDurationMillis>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2105,6 +2355,11 @@ sourcetype</label>
     <type>org.apache.nifi.processors.standard.TailFile</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>nifi logs</name>
                             <variables/>
                         </processGroups>
@@ -2256,7 +2511,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -2372,7 +2627,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>ERROR</bulletinLevel>
@@ -2395,6 +2650,12 @@ sourcetype</label>
                 <key>Rolling Filename Pattern</key>
                 <value>
                     <name>Rolling Filename Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>
+                    <name>Post-Rollover Tail Period</name>
                 </value>
             </entry>
             <entry>
@@ -2433,6 +2694,31 @@ sourcetype</label>
                     <name>tailfile-maximum-age</name>
                 </value>
             </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>
+                    <name>reread-on-nul</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+                <value>
+                    <dependencies>
+                        <dependentValues>Single file</dependentValues>
+                        <propertyName>tail-mode</propertyName>
+                    </dependencies>
+                    <name>Line Start Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>
+                    <dependencies>
+                        <propertyName>Line Start Pattern</propertyName>
+                    </dependencies>
+                    <name>Max Buffer Size</name>
+                </value>
+            </entry>
         </descriptors>
         <executionNode>ALL</executionNode>
         <lossTolerant>false</lossTolerant>
@@ -2449,6 +2735,10 @@ sourcetype</label>
             <entry>
                 <key>Rolling Filename Pattern</key>
                 <value>${filename}.out.*</value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>0 sec</value>
             </entry>
             <entry>
                 <key>tail-base-directory</key>
@@ -2473,6 +2763,17 @@ sourcetype</label>
             <entry>
                 <key>tailfile-maximum-age</key>
                 <value>24 hours</value>
+            </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>false</value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>64 KB</value>
             </entry>
         </properties>
         <runDurationMillis>0</runDurationMillis>
@@ -2500,7 +2801,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>ERROR</bulletinLevel>
@@ -2523,6 +2824,12 @@ sourcetype</label>
                 <key>Rolling Filename Pattern</key>
                 <value>
                     <name>Rolling Filename Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>
+                    <name>Post-Rollover Tail Period</name>
                 </value>
             </entry>
             <entry>
@@ -2561,6 +2868,31 @@ sourcetype</label>
                     <name>tailfile-maximum-age</name>
                 </value>
             </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>
+                    <name>reread-on-nul</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+                <value>
+                    <dependencies>
+                        <dependentValues>Single file</dependentValues>
+                        <propertyName>tail-mode</propertyName>
+                    </dependencies>
+                    <name>Line Start Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>
+                    <dependencies>
+                        <propertyName>Line Start Pattern</propertyName>
+                    </dependencies>
+                    <name>Max Buffer Size</name>
+                </value>
+            </entry>
         </descriptors>
         <executionNode>ALL</executionNode>
         <lossTolerant>false</lossTolerant>
@@ -2577,6 +2909,10 @@ sourcetype</label>
             <entry>
                 <key>Rolling Filename Pattern</key>
                 <value>${filename}.out.*</value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>0 sec</value>
             </entry>
             <entry>
                 <key>tail-base-directory</key>
@@ -2602,6 +2938,17 @@ sourcetype</label>
                 <key>tailfile-maximum-age</key>
                 <value>24 hours</value>
             </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>false</value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>64 KB</value>
+            </entry>
         </properties>
         <runDurationMillis>0</runDurationMillis>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -2619,6 +2966,11 @@ sourcetype</label>
     <type>org.apache.nifi.processors.standard.TailFile</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>Sparklogs(info about started workers)</name>
                             <variables/>
                         </processGroups>
@@ -2745,7 +3097,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -2768,6 +3120,12 @@ sourcetype</label>
                 <key>Rolling Filename Pattern</key>
                 <value>
                     <name>Rolling Filename Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>
+                    <name>Post-Rollover Tail Period</name>
                 </value>
             </entry>
             <entry>
@@ -2806,6 +3164,31 @@ sourcetype</label>
                     <name>tailfile-maximum-age</name>
                 </value>
             </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>
+                    <name>reread-on-nul</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+                <value>
+                    <dependencies>
+                        <dependentValues>Single file</dependentValues>
+                        <propertyName>tail-mode</propertyName>
+                    </dependencies>
+                    <name>Line Start Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>
+                    <dependencies>
+                        <propertyName>Line Start Pattern</propertyName>
+                    </dependencies>
+                    <name>Max Buffer Size</name>
+                </value>
+            </entry>
         </descriptors>
         <executionNode>ALL</executionNode>
         <lossTolerant>false</lossTolerant>
@@ -2822,6 +3205,10 @@ sourcetype</label>
             <entry>
                 <key>Rolling Filename Pattern</key>
                 <value>${filename}</value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>0 sec</value>
             </entry>
             <entry>
                 <key>tail-base-directory</key>
@@ -2846,6 +3233,17 @@ sourcetype</label>
             <entry>
                 <key>tailfile-maximum-age</key>
                 <value>24 hours</value>
+            </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>false</value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>64 KB</value>
             </entry>
         </properties>
         <runDurationMillis>0</runDurationMillis>
@@ -2873,7 +3271,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -2980,6 +3378,11 @@ sourcetype</label>
     <type>org.apache.nifi.processors.attributes.UpdateAttribute</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>SuperDispatcher logs (driver)</name>
                             <variables/>
                         </processGroups>
@@ -3105,7 +3508,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -3128,6 +3531,12 @@ sourcetype</label>
                 <key>Rolling Filename Pattern</key>
                 <value>
                     <name>Rolling Filename Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>
+                    <name>Post-Rollover Tail Period</name>
                 </value>
             </entry>
             <entry>
@@ -3166,6 +3575,31 @@ sourcetype</label>
                     <name>tailfile-maximum-age</name>
                 </value>
             </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>
+                    <name>reread-on-nul</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+                <value>
+                    <dependencies>
+                        <dependentValues>Single file</dependentValues>
+                        <propertyName>tail-mode</propertyName>
+                    </dependencies>
+                    <name>Line Start Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>
+                    <dependencies>
+                        <propertyName>Line Start Pattern</propertyName>
+                    </dependencies>
+                    <name>Max Buffer Size</name>
+                </value>
+            </entry>
         </descriptors>
         <executionNode>ALL</executionNode>
         <lossTolerant>false</lossTolerant>
@@ -3181,6 +3615,10 @@ sourcetype</label>
             </entry>
             <entry>
                 <key>Rolling Filename Pattern</key>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>0 sec</value>
             </entry>
             <entry>
                 <key>tail-base-directory</key>
@@ -3205,6 +3643,17 @@ sourcetype</label>
             <entry>
                 <key>tailfile-maximum-age</key>
                 <value>24 hours</value>
+            </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>false</value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>64 KB</value>
             </entry>
         </properties>
         <runDurationMillis>0</runDurationMillis>
@@ -3232,7 +3681,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -3339,6 +3788,11 @@ sourcetype</label>
     <type>org.apache.nifi.processors.attributes.UpdateAttribute</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>otsimplerest logs</name>
                             <variables/>
                         </processGroups>
@@ -3465,7 +3919,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -3581,7 +4035,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -3604,6 +4058,12 @@ sourcetype</label>
                 <key>Rolling Filename Pattern</key>
                 <value>
                     <name>Rolling Filename Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>
+                    <name>Post-Rollover Tail Period</name>
                 </value>
             </entry>
             <entry>
@@ -3642,6 +4102,31 @@ sourcetype</label>
                     <name>tailfile-maximum-age</name>
                 </value>
             </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>
+                    <name>reread-on-nul</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+                <value>
+                    <dependencies>
+                        <dependentValues>Single file</dependentValues>
+                        <propertyName>tail-mode</propertyName>
+                    </dependencies>
+                    <name>Line Start Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>
+                    <dependencies>
+                        <propertyName>Line Start Pattern</propertyName>
+                    </dependencies>
+                    <name>Max Buffer Size</name>
+                </value>
+            </entry>
         </descriptors>
         <executionNode>ALL</executionNode>
         <lossTolerant>false</lossTolerant>
@@ -3658,6 +4143,10 @@ sourcetype</label>
             <entry>
                 <key>Rolling Filename Pattern</key>
                 <value>${filename}</value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>0 sec</value>
             </entry>
             <entry>
                 <key>tail-base-directory</key>
@@ -3683,6 +4172,17 @@ sourcetype</label>
                 <key>tailfile-maximum-age</key>
                 <value>24 hours</value>
             </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>false</value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>64 KB</value>
+            </entry>
         </properties>
         <runDurationMillis>0</runDurationMillis>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -3700,6 +4200,11 @@ sourcetype</label>
     <type>org.apache.nifi.processors.standard.TailFile</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>Spark app logs</name>
                             <variables/>
                         </processGroups>
@@ -3901,7 +4406,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -4017,7 +4522,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -4113,7 +4618,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -4136,6 +4641,12 @@ sourcetype</label>
                 <key>Rolling Filename Pattern</key>
                 <value>
                     <name>Rolling Filename Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>
+                    <name>Post-Rollover Tail Period</name>
                 </value>
             </entry>
             <entry>
@@ -4174,6 +4685,31 @@ sourcetype</label>
                     <name>tailfile-maximum-age</name>
                 </value>
             </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>
+                    <name>reread-on-nul</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+                <value>
+                    <dependencies>
+                        <dependentValues>Single file</dependentValues>
+                        <propertyName>tail-mode</propertyName>
+                    </dependencies>
+                    <name>Line Start Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>
+                    <dependencies>
+                        <propertyName>Line Start Pattern</propertyName>
+                    </dependencies>
+                    <name>Max Buffer Size</name>
+                </value>
+            </entry>
         </descriptors>
         <executionNode>ALL</executionNode>
         <lossTolerant>false</lossTolerant>
@@ -4190,6 +4726,10 @@ sourcetype</label>
             <entry>
                 <key>Rolling Filename Pattern</key>
                 <value>${filename}.log.*</value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>0 sec</value>
             </entry>
             <entry>
                 <key>tail-base-directory</key>
@@ -4214,6 +4754,17 @@ sourcetype</label>
             <entry>
                 <key>tailfile-maximum-age</key>
                 <value>24 hours</value>
+            </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>false</value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>64 KB</value>
             </entry>
         </properties>
         <runDurationMillis>0</runDurationMillis>
@@ -4241,7 +4792,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -4264,6 +4815,12 @@ sourcetype</label>
                 <key>Rolling Filename Pattern</key>
                 <value>
                     <name>Rolling Filename Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>
+                    <name>Post-Rollover Tail Period</name>
                 </value>
             </entry>
             <entry>
@@ -4302,6 +4859,31 @@ sourcetype</label>
                     <name>tailfile-maximum-age</name>
                 </value>
             </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>
+                    <name>reread-on-nul</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+                <value>
+                    <dependencies>
+                        <dependentValues>Single file</dependentValues>
+                        <propertyName>tail-mode</propertyName>
+                    </dependencies>
+                    <name>Line Start Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>
+                    <dependencies>
+                        <propertyName>Line Start Pattern</propertyName>
+                    </dependencies>
+                    <name>Max Buffer Size</name>
+                </value>
+            </entry>
         </descriptors>
         <executionNode>ALL</executionNode>
         <lossTolerant>false</lossTolerant>
@@ -4318,6 +4900,10 @@ sourcetype</label>
             <entry>
                 <key>Rolling Filename Pattern</key>
                 <value>${filename}.log.*</value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>0 sec</value>
             </entry>
             <entry>
                 <key>tail-base-directory</key>
@@ -4342,6 +4928,17 @@ sourcetype</label>
             <entry>
                 <key>tailfile-maximum-age</key>
                 <value>24 hours</value>
+            </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>false</value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>64 KB</value>
             </entry>
         </properties>
         <runDurationMillis>0</runDurationMillis>
@@ -4369,7 +4966,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -4456,6 +5053,11 @@ sourcetype</label>
     <type>org.apache.nifi.processors.attributes.UpdateAttribute</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>nginx logs</name>
                             <variables/>
                         </processGroups>
@@ -4528,7 +5130,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -4620,6 +5222,12 @@ sourcetype</label>
                 </value>
             </entry>
             <entry>
+                <key>extract-text-enable-named-groups</key>
+                <value>
+                    <name>extract-text-enable-named-groups</name>
+                </value>
+            </entry>
+            <entry>
                 <key>_raw</key>
                 <value>
                     <name>_raw</name>
@@ -4687,6 +5295,10 @@ sourcetype</label>
                 <value>false</value>
             </entry>
             <entry>
+                <key>extract-text-enable-named-groups</key>
+                <value>false</value>
+            </entry>
+            <entry>
                 <key>_raw</key>
                 <value>(.*)</value>
             </entry>
@@ -4720,7 +5332,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -4817,7 +5429,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -4876,6 +5488,11 @@ sourcetype</label>
     <type>org.apache.nifi.processors.standard.LogMessage</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>service info</name>
                             <variables/>
                         </processGroups>
@@ -5002,7 +5619,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -5118,7 +5735,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -5141,6 +5758,12 @@ sourcetype</label>
                 <key>Rolling Filename Pattern</key>
                 <value>
                     <name>Rolling Filename Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>
+                    <name>Post-Rollover Tail Period</name>
                 </value>
             </entry>
             <entry>
@@ -5179,6 +5802,31 @@ sourcetype</label>
                     <name>tailfile-maximum-age</name>
                 </value>
             </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>
+                    <name>reread-on-nul</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+                <value>
+                    <dependencies>
+                        <dependentValues>Single file</dependentValues>
+                        <propertyName>tail-mode</propertyName>
+                    </dependencies>
+                    <name>Line Start Pattern</name>
+                </value>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>
+                    <dependencies>
+                        <propertyName>Line Start Pattern</propertyName>
+                    </dependencies>
+                    <name>Max Buffer Size</name>
+                </value>
+            </entry>
         </descriptors>
         <executionNode>ALL</executionNode>
         <lossTolerant>false</lossTolerant>
@@ -5194,6 +5842,10 @@ sourcetype</label>
             </entry>
             <entry>
                 <key>Rolling Filename Pattern</key>
+            </entry>
+            <entry>
+                <key>Post-Rollover Tail Period</key>
+                <value>0 sec</value>
             </entry>
             <entry>
                 <key>tail-base-directory</key>
@@ -5219,6 +5871,17 @@ sourcetype</label>
                 <key>tailfile-maximum-age</key>
                 <value>24 hours</value>
             </entry>
+            <entry>
+                <key>reread-on-nul</key>
+                <value>false</value>
+            </entry>
+            <entry>
+                <key>Line Start Pattern</key>
+            </entry>
+            <entry>
+                <key>Max Buffer Size</key>
+                <value>64 KB</value>
+            </entry>
         </properties>
         <runDurationMillis>0</runDurationMillis>
         <schedulingPeriod>0 sec</schedulingPeriod>
@@ -5236,10 +5899,20 @@ sourcetype</label>
     <type>org.apache.nifi.processors.standard.TailFile</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>Sparklogs (executors)</name>
                             <variables/>
                         </processGroups>
                     </contents>
+                    <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                    <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                    <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                    <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                    <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                     <name>Take logs from components</name>
                     <variables/>
                 </processGroups>
@@ -5913,7 +6586,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -6025,7 +6698,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -6112,6 +6785,11 @@ sourcetype</label>
     <type>org.apache.nifi.processors.attributes.UpdateAttribute</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>Sparklogs (executors)</name>
                             <variables/>
                         </processGroups>
@@ -6274,7 +6952,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -6386,7 +7064,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -6473,6 +7151,11 @@ sourcetype</label>
     <type>org.apache.nifi.processors.attributes.UpdateAttribute</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>OTsimplerest logs</name>
                             <variables/>
                         </processGroups>
@@ -6715,7 +7398,7 @@ sourcetype</label>
             <bundle>
                 <artifact>nifi-standard-nar</artifact>
                 <group>org.apache.nifi</group>
-                <version>1.11.1</version>
+                <version>1.15.1</version>
             </bundle>
             <config>
                 <bulletinLevel>WARN</bulletinLevel>
@@ -6783,7 +7466,7 @@ sourcetype</label>
             <bundle>
                 <artifact>nifi-standard-nar</artifact>
                 <group>org.apache.nifi</group>
-                <version>1.11.1</version>
+                <version>1.15.1</version>
             </bundle>
             <config>
                 <bulletinLevel>WARN</bulletinLevel>
@@ -6880,7 +7563,7 @@ sourcetype</label>
             <bundle>
                 <artifact>nifi-standard-nar</artifact>
                 <group>org.apache.nifi</group>
-                <version>1.11.1</version>
+                <version>1.15.1</version>
             </bundle>
             <config>
                 <bulletinLevel>WARN</bulletinLevel>
@@ -6972,6 +7655,12 @@ sourcetype</label>
                         </value>
                     </entry>
                     <entry>
+                        <key>extract-text-enable-named-groups</key>
+                        <value>
+                            <name>extract-text-enable-named-groups</name>
+                        </value>
+                    </entry>
+                    <entry>
                         <key>_raw</key>
                         <value>
                             <name>_raw</name>
@@ -7039,6 +7728,10 @@ sourcetype</label>
                         <value>false</value>
                     </entry>
                     <entry>
+                        <key>extract-text-enable-named-groups</key>
+                        <value>false</value>
+                    </entry>
+                    <entry>
                         <key>_raw</key>
                         <value>(.*)</value>
                     </entry>
@@ -7063,6 +7756,11 @@ sourcetype</label>
             <type>org.apache.nifi.processors.standard.ExtractText</type>
         </processors>
     </contents>
+    <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+    <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+    <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+    <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+    <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
     <name>Log info about disk space</name>
     <variables/>
 </processGroups>
@@ -7076,7 +7774,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -7172,7 +7870,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -7275,6 +7973,11 @@ sourcetype</label>
     <type>org.apache.nifi.processors.standard.ReplaceText</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>Glusterfs client log</name>
                             <variables/>
                         </processGroups>
@@ -7438,7 +8141,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -7534,7 +8237,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -7637,6 +8340,11 @@ sourcetype</label>
     <type>org.apache.nifi.processors.standard.ReplaceText</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>Nginx logs</name>
                             <variables/>
                         </processGroups>
@@ -7800,7 +8508,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -7916,7 +8624,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -8019,6 +8727,11 @@ sourcetype</label>
     <type>org.apache.nifi.processors.standard.ReplaceText</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>SuperDispatcher logs (driver)</name>
                             <variables/>
                         </processGroups>
@@ -8182,7 +8895,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -8294,7 +9007,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -8381,6 +9094,11 @@ sourcetype</label>
     <type>org.apache.nifi.processors.attributes.UpdateAttribute</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>Spark app logs</name>
                             <variables/>
                         </processGroups>
@@ -8644,7 +9362,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -8730,7 +9448,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -8816,7 +9534,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -8892,7 +9610,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -9004,7 +9722,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -9081,6 +9799,11 @@ sourcetype</label>
     <type>org.apache.nifi.processors.attributes.UpdateAttribute</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>Nifi logs</name>
                             <variables/>
                         </processGroups>
@@ -9244,7 +9967,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -9340,7 +10063,7 @@ sourcetype</label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -9443,6 +10166,11 @@ sourcetype</label>
     <type>org.apache.nifi.processors.standard.ReplaceText</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>Sparklogs(info about started workers)</name>
                             <variables/>
                         </processGroups>
@@ -9456,7 +10184,7 @@ sourcetype</label>
                             <bundle>
 <artifact>nifi-update-attribute-nar</artifact>
 <group>org.apache.nifi</group>
-<version>1.11.1</version>
+<version>1.15.1</version>
                             </bundle>
                             <config>
 <bulletinLevel>WARN</bulletinLevel>
@@ -9552,7 +10280,7 @@ sourcetype</label>
                             <bundle>
 <artifact>nifi-standard-nar</artifact>
 <group>org.apache.nifi</group>
-<version>1.11.1</version>
+<version>1.15.1</version>
                             </bundle>
                             <config>
 <bulletinLevel>WARN</bulletinLevel>
@@ -9726,7 +10454,7 @@ sourcetype</label>
                             <bundle>
 <artifact>nifi-standard-nar</artifact>
 <group>org.apache.nifi</group>
-<version>1.11.1</version>
+<version>1.15.1</version>
                             </bundle>
                             <config>
 <bulletinLevel>WARN</bulletinLevel>
@@ -9818,6 +10546,12 @@ sourcetype</label>
         </value>
     </entry>
     <entry>
+        <key>extract-text-enable-named-groups</key>
+        <value>
+            <name>extract-text-enable-named-groups</name>
+        </value>
+    </entry>
+    <entry>
         <key>host</key>
         <value>
             <name>host</name>
@@ -9891,6 +10625,10 @@ sourcetype</label>
         <value>false</value>
     </entry>
     <entry>
+        <key>extract-text-enable-named-groups</key>
+        <value>false</value>
+    </entry>
+    <entry>
         <key>host</key>
         <value>host=(.*?) </value>
     </entry>
@@ -9928,7 +10666,7 @@ sourcetype</label>
                             <bundle>
 <artifact>nifi-standard-nar</artifact>
 <group>org.apache.nifi</group>
-<version>1.11.1</version>
+<version>1.15.1</version>
                             </bundle>
                             <config>
 <bulletinLevel>WARN</bulletinLevel>
@@ -9990,6 +10728,18 @@ sourcetype</label>
         </value>
     </entry>
     <entry>
+        <key>max-receiving-threads</key>
+        <value>
+            <name>max-receiving-threads</name>
+        </value>
+    </entry>
+    <entry>
+        <key>pool-receive-buffers</key>
+        <value>
+            <name>pool-receive-buffers</name>
+        </value>
+    </entry>
+    <entry>
         <key>SSL Context Service</key>
         <value>
             <identifiesControllerService>org.apache.nifi.ssl.RestrictedSSLContextService</identifiesControllerService>
@@ -10043,6 +10793,13 @@ sourcetype</label>
         <value>2</value>
     </entry>
     <entry>
+        <key>max-receiving-threads</key>
+    </entry>
+    <entry>
+        <key>pool-receive-buffers</key>
+        <value>True</value>
+    </entry>
+    <entry>
         <key>SSL Context Service</key>
     </entry>
     <entry>
@@ -10066,6 +10823,11 @@ sourcetype</label>
                             <type>org.apache.nifi.processors.standard.ListenTCP</type>
                         </processors>
                     </contents>
+                    <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                    <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                    <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                    <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                    <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                     <name>Take logs from components(TCP port)</name>
                     <variables/>
                 </processGroups>
@@ -10636,7 +11398,7 @@ sourcetype</label>
                             <bundle>
 <artifact>nifi-record-serialization-services-nar</artifact>
 <group>org.apache.nifi</group>
-<version>1.11.1</version>
+<version>1.15.1</version>
                             </bundle>
                             <comments></comments>
                             <descriptors>
@@ -10649,6 +11411,13 @@ sourcetype</label>
 <entry>
     <key>schema-registry</key>
     <value>
+        <dependencies>
+            <dependentValues>confluent-encoded</dependentValues>
+            <dependentValues>schema-name</dependentValues>
+            <dependentValues>hwx-schema-ref-attributes</dependentValues>
+            <dependentValues>hwx-content-encoded-schema</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <identifiesControllerService>org.apache.nifi.schemaregistry.services.SchemaRegistry</identifiesControllerService>
         <name>schema-registry</name>
     </value>
@@ -10656,24 +11425,40 @@ sourcetype</label>
 <entry>
     <key>schema-name</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-name</name>
     </value>
 </entry>
 <entry>
     <key>schema-version</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-version</name>
     </value>
 </entry>
 <entry>
     <key>schema-branch</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-branch</name>
     </value>
 </entry>
 <entry>
     <key>schema-text</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-text-property</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-text</name>
     </value>
 </entry>
@@ -10741,7 +11526,7 @@ sourcetype</label>
                             <bundle>
 <artifact>nifi-record-serialization-services-nar</artifact>
 <group>org.apache.nifi</group>
-<version>1.11.1</version>
+<version>1.15.1</version>
                             </bundle>
                             <comments></comments>
                             <descriptors>
@@ -10754,6 +11539,13 @@ sourcetype</label>
 <entry>
     <key>schema-registry</key>
     <value>
+        <dependencies>
+            <dependentValues>confluent-encoded</dependentValues>
+            <dependentValues>schema-name</dependentValues>
+            <dependentValues>hwx-schema-ref-attributes</dependentValues>
+            <dependentValues>hwx-content-encoded-schema</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <identifiesControllerService>org.apache.nifi.schemaregistry.services.SchemaRegistry</identifiesControllerService>
         <name>schema-registry</name>
     </value>
@@ -10761,24 +11553,40 @@ sourcetype</label>
 <entry>
     <key>schema-name</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-name</name>
     </value>
 </entry>
 <entry>
     <key>schema-version</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-version</name>
     </value>
 </entry>
 <entry>
     <key>schema-branch</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-branch</name>
     </value>
 </entry>
 <entry>
     <key>schema-text</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-text-property</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-text</name>
     </value>
 </entry>
@@ -10846,7 +11654,7 @@ sourcetype</label>
                             <bundle>
 <artifact>nifi-record-serialization-services-nar</artifact>
 <group>org.apache.nifi</group>
-<version>1.11.1</version>
+<version>1.15.1</version>
                             </bundle>
                             <comments></comments>
                             <descriptors>
@@ -10874,7 +11682,7 @@ sourcetype</label>
                             <bundle>
 <artifact>nifi-record-serialization-services-nar</artifact>
 <group>org.apache.nifi</group>
-<version>1.11.1</version>
+<version>1.15.1</version>
                             </bundle>
                             <comments></comments>
                             <descriptors>
@@ -10887,6 +11695,13 @@ sourcetype</label>
 <entry>
     <key>schema-registry</key>
     <value>
+        <dependencies>
+            <dependentValues>confluent-encoded</dependentValues>
+            <dependentValues>schema-name</dependentValues>
+            <dependentValues>hwx-schema-ref-attributes</dependentValues>
+            <dependentValues>hwx-content-encoded-schema</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <identifiesControllerService>org.apache.nifi.schemaregistry.services.SchemaRegistry</identifiesControllerService>
         <name>schema-registry</name>
     </value>
@@ -10894,24 +11709,40 @@ sourcetype</label>
 <entry>
     <key>schema-name</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-name</name>
     </value>
 </entry>
 <entry>
     <key>schema-version</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-version</name>
     </value>
 </entry>
 <entry>
     <key>schema-branch</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-branch</name>
     </value>
 </entry>
 <entry>
     <key>schema-text</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-text-property</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-text</name>
     </value>
 </entry>
@@ -10979,7 +11810,7 @@ sourcetype</label>
                             <bundle>
 <artifact>nifi-record-serialization-services-nar</artifact>
 <group>org.apache.nifi</group>
-<version>1.11.1</version>
+<version>1.15.1</version>
                             </bundle>
                             <comments></comments>
                             <descriptors>
@@ -10992,6 +11823,13 @@ sourcetype</label>
 <entry>
     <key>schema-registry</key>
     <value>
+        <dependencies>
+            <dependentValues>confluent-encoded</dependentValues>
+            <dependentValues>schema-name</dependentValues>
+            <dependentValues>hwx-schema-ref-attributes</dependentValues>
+            <dependentValues>hwx-content-encoded-schema</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <identifiesControllerService>org.apache.nifi.schemaregistry.services.SchemaRegistry</identifiesControllerService>
         <name>schema-registry</name>
     </value>
@@ -10999,24 +11837,40 @@ sourcetype</label>
 <entry>
     <key>schema-name</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-name</name>
     </value>
 </entry>
 <entry>
     <key>schema-version</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-version</name>
     </value>
 </entry>
 <entry>
     <key>schema-branch</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-branch</name>
     </value>
 </entry>
 <entry>
     <key>schema-text</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-text-property</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-text</name>
     </value>
 </entry>
@@ -11084,7 +11938,7 @@ sourcetype</label>
                             <bundle>
 <artifact>nifi-record-serialization-services-nar</artifact>
 <group>org.apache.nifi</group>
-<version>1.11.1</version>
+<version>1.15.1</version>
                             </bundle>
                             <comments></comments>
                             <descriptors>
@@ -11097,6 +11951,13 @@ sourcetype</label>
 <entry>
     <key>schema-registry</key>
     <value>
+        <dependencies>
+            <dependentValues>confluent-encoded</dependentValues>
+            <dependentValues>schema-name</dependentValues>
+            <dependentValues>hwx-schema-ref-attributes</dependentValues>
+            <dependentValues>hwx-content-encoded-schema</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <identifiesControllerService>org.apache.nifi.schemaregistry.services.SchemaRegistry</identifiesControllerService>
         <name>schema-registry</name>
     </value>
@@ -11104,24 +11965,40 @@ sourcetype</label>
 <entry>
     <key>schema-name</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-name</name>
     </value>
 </entry>
 <entry>
     <key>schema-version</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-version</name>
     </value>
 </entry>
 <entry>
     <key>schema-branch</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-branch</name>
     </value>
 </entry>
 <entry>
     <key>schema-text</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-text-property</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-text</name>
     </value>
 </entry>
@@ -11189,7 +12066,7 @@ sourcetype</label>
                             <bundle>
 <artifact>nifi-record-serialization-services-nar</artifact>
 <group>org.apache.nifi</group>
-<version>1.11.1</version>
+<version>1.15.1</version>
                             </bundle>
                             <comments></comments>
                             <descriptors>
@@ -11202,6 +12079,13 @@ sourcetype</label>
 <entry>
     <key>schema-registry</key>
     <value>
+        <dependencies>
+            <dependentValues>confluent-encoded</dependentValues>
+            <dependentValues>schema-name</dependentValues>
+            <dependentValues>hwx-schema-ref-attributes</dependentValues>
+            <dependentValues>hwx-content-encoded-schema</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <identifiesControllerService>org.apache.nifi.schemaregistry.services.SchemaRegistry</identifiesControllerService>
         <name>schema-registry</name>
     </value>
@@ -11209,30 +12093,50 @@ sourcetype</label>
 <entry>
     <key>schema-name</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-name</name>
     </value>
 </entry>
 <entry>
     <key>schema-version</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-version</name>
     </value>
 </entry>
 <entry>
     <key>schema-branch</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-branch</name>
     </value>
 </entry>
 <entry>
     <key>schema-text</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-text-property</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-text</name>
     </value>
 </entry>
 <entry>
     <key>schema-inference-cache</key>
     <value>
+        <dependencies>
+            <dependentValues>infer-schema</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <identifiesControllerService>org.apache.nifi.serialization.RecordSchemaCacheService</identifiesControllerService>
         <name>schema-inference-cache</name>
     </value>
@@ -11303,7 +12207,7 @@ sourcetype</label>
                             <bundle>
 <artifact>nifi-record-serialization-services-nar</artifact>
 <group>org.apache.nifi</group>
-<version>1.11.1</version>
+<version>1.15.1</version>
                             </bundle>
                             <comments></comments>
                             <descriptors>
@@ -11321,6 +12225,17 @@ sourcetype</label>
     </value>
 </entry>
 <entry>
+    <key>schema-protocol-version</key>
+    <value>
+        <dependencies>
+            <dependentValues>hwx-schema-ref-attributes</dependentValues>
+            <dependentValues>hwx-content-encoded-schema</dependentValues>
+            <propertyName>Schema Write Strategy</propertyName>
+        </dependencies>
+        <name>schema-protocol-version</name>
+    </value>
+</entry>
+<entry>
     <key>schema-access-strategy</key>
     <value>
         <name>schema-access-strategy</name>
@@ -11329,6 +12244,13 @@ sourcetype</label>
 <entry>
     <key>schema-registry</key>
     <value>
+        <dependencies>
+            <dependentValues>confluent-encoded</dependentValues>
+            <dependentValues>schema-name</dependentValues>
+            <dependentValues>hwx-schema-ref-attributes</dependentValues>
+            <dependentValues>hwx-content-encoded-schema</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <identifiesControllerService>org.apache.nifi.schemaregistry.services.SchemaRegistry</identifiesControllerService>
         <name>schema-registry</name>
     </value>
@@ -11336,24 +12258,40 @@ sourcetype</label>
 <entry>
     <key>schema-name</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-name</name>
     </value>
 </entry>
 <entry>
     <key>schema-version</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-version</name>
     </value>
 </entry>
 <entry>
     <key>schema-branch</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-branch</name>
     </value>
 </entry>
 <entry>
     <key>schema-text</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-text-property</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-text</name>
     </value>
 </entry>
@@ -11402,6 +12340,10 @@ sourcetype</label>
 <entry>
     <key>compression-level</key>
     <value>
+        <dependencies>
+            <dependentValues>gzip</dependentValues>
+            <propertyName>compression-format</propertyName>
+        </dependencies>
         <name>compression-level</name>
     </value>
 </entry>
@@ -11416,6 +12358,10 @@ sourcetype</label>
 <entry>
     <key>schema-cache</key>
     <value>329dc473-7783-3999-0000-000000000000</value>
+</entry>
+<entry>
+    <key>schema-protocol-version</key>
+    <value>1</value>
 </entry>
 <entry>
     <key>schema-access-strategy</key>
@@ -11477,7 +12423,7 @@ sourcetype</label>
                             <bundle>
 <artifact>nifi-record-serialization-services-nar</artifact>
 <group>org.apache.nifi</group>
-<version>1.11.1</version>
+<version>1.15.1</version>
                             </bundle>
                             <comments></comments>
                             <descriptors>
@@ -11490,6 +12436,13 @@ sourcetype</label>
 <entry>
     <key>schema-registry</key>
     <value>
+        <dependencies>
+            <dependentValues>confluent-encoded</dependentValues>
+            <dependentValues>schema-name</dependentValues>
+            <dependentValues>hwx-schema-ref-attributes</dependentValues>
+            <dependentValues>hwx-content-encoded-schema</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <identifiesControllerService>org.apache.nifi.schemaregistry.services.SchemaRegistry</identifiesControllerService>
         <name>schema-registry</name>
     </value>
@@ -11497,24 +12450,40 @@ sourcetype</label>
 <entry>
     <key>schema-name</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-name</name>
     </value>
 </entry>
 <entry>
     <key>schema-version</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-version</name>
     </value>
 </entry>
 <entry>
     <key>schema-branch</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-branch</name>
     </value>
 </entry>
 <entry>
     <key>schema-text</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-text-property</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-text</name>
     </value>
 </entry>
@@ -11582,7 +12551,7 @@ sourcetype</label>
                             <bundle>
 <artifact>nifi-record-serialization-services-nar</artifact>
 <group>org.apache.nifi</group>
-<version>1.11.1</version>
+<version>1.15.1</version>
                             </bundle>
                             <comments></comments>
                             <descriptors>
@@ -11600,6 +12569,17 @@ sourcetype</label>
     </value>
 </entry>
 <entry>
+    <key>schema-protocol-version</key>
+    <value>
+        <dependencies>
+            <dependentValues>hwx-schema-ref-attributes</dependentValues>
+            <dependentValues>hwx-content-encoded-schema</dependentValues>
+            <propertyName>Schema Write Strategy</propertyName>
+        </dependencies>
+        <name>schema-protocol-version</name>
+    </value>
+</entry>
+<entry>
     <key>schema-access-strategy</key>
     <value>
         <name>schema-access-strategy</name>
@@ -11608,6 +12588,13 @@ sourcetype</label>
 <entry>
     <key>schema-registry</key>
     <value>
+        <dependencies>
+            <dependentValues>confluent-encoded</dependentValues>
+            <dependentValues>schema-name</dependentValues>
+            <dependentValues>hwx-schema-ref-attributes</dependentValues>
+            <dependentValues>hwx-content-encoded-schema</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <identifiesControllerService>org.apache.nifi.schemaregistry.services.SchemaRegistry</identifiesControllerService>
         <name>schema-registry</name>
     </value>
@@ -11615,24 +12602,40 @@ sourcetype</label>
 <entry>
     <key>schema-name</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-name</name>
     </value>
 </entry>
 <entry>
     <key>schema-version</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-version</name>
     </value>
 </entry>
 <entry>
     <key>schema-branch</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-branch</name>
     </value>
 </entry>
 <entry>
     <key>schema-text</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-text-property</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-text</name>
     </value>
 </entry>
@@ -11681,6 +12684,10 @@ sourcetype</label>
 <entry>
     <key>compression-level</key>
     <value>
+        <dependencies>
+            <dependentValues>gzip</dependentValues>
+            <propertyName>compression-format</propertyName>
+        </dependencies>
         <name>compression-level</name>
     </value>
 </entry>
@@ -11694,6 +12701,10 @@ sourcetype</label>
 </entry>
 <entry>
     <key>schema-cache</key>
+</entry>
+<entry>
+    <key>schema-protocol-version</key>
+    <value>1</value>
 </entry>
 <entry>
     <key>schema-access-strategy</key>
@@ -11755,7 +12766,7 @@ sourcetype</label>
                             <bundle>
 <artifact>nifi-record-serialization-services-nar</artifact>
 <group>org.apache.nifi</group>
-<version>1.11.1</version>
+<version>1.15.1</version>
                             </bundle>
                             <comments></comments>
                             <descriptors>
@@ -11768,6 +12779,13 @@ sourcetype</label>
 <entry>
     <key>schema-registry</key>
     <value>
+        <dependencies>
+            <dependentValues>confluent-encoded</dependentValues>
+            <dependentValues>schema-name</dependentValues>
+            <dependentValues>hwx-schema-ref-attributes</dependentValues>
+            <dependentValues>hwx-content-encoded-schema</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <identifiesControllerService>org.apache.nifi.schemaregistry.services.SchemaRegistry</identifiesControllerService>
         <name>schema-registry</name>
     </value>
@@ -11775,24 +12793,40 @@ sourcetype</label>
 <entry>
     <key>schema-name</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-name</name>
     </value>
 </entry>
 <entry>
     <key>schema-version</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-version</name>
     </value>
 </entry>
 <entry>
     <key>schema-branch</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-name</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-branch</name>
     </value>
 </entry>
 <entry>
     <key>schema-text</key>
     <value>
+        <dependencies>
+            <dependentValues>schema-text-property</dependentValues>
+            <propertyName>schema-access-strategy</propertyName>
+        </dependencies>
         <name>schema-text</name>
     </value>
 </entry>
@@ -12141,7 +13175,7 @@ _bucket_period </label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -12299,7 +13333,7 @@ _bucket_period </label>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -12384,6 +13418,11 @@ _bucket_period </label>
     <type>org.apache.nifi.processors.standard.UpdateRecord</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>Processing spark-event log</name>
                             <variables/>
                         </processGroups>
@@ -12527,7 +13566,7 @@ _time (12-тизначный формат)
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -12611,7 +13650,7 @@ _time (12-тизначный формат)
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -12686,6 +13725,11 @@ _time (12-тизначный формат)
     <type>org.apache.nifi.processors.standard.UpdateRecord</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>Process rest logs</name>
                             <variables/>
                         </processGroups>
@@ -12808,7 +13852,7 @@ _time (12-тизначный формат)
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -12892,7 +13936,7 @@ _time (12-тизначный формат)
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -12967,6 +14011,11 @@ _time (12-тизначный формат)
     <type>org.apache.nifi.processors.standard.UpdateRecord</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>Process nifi logs</name>
                             <variables/>
                         </processGroups>
@@ -13189,7 +14238,7 @@ _time (12-тизначный формат)
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -13273,7 +14322,7 @@ _time (12-тизначный формат)
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -13367,7 +14416,7 @@ _time (12-тизначный формат)
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -13443,7 +14492,7 @@ _time (12-тизначный формат)
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -13527,7 +14576,7 @@ _time (12-тизначный формат)
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -13602,6 +14651,11 @@ _time (12-тизначный формат)
     <type>org.apache.nifi.processors.standard.UpdateRecord</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>Process nginx logs</name>
                             <variables/>
                         </processGroups>
@@ -13833,7 +14887,7 @@ _time (12-тизначный формат)
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -13917,7 +14971,7 @@ _time (12-тизначный формат)
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -14002,6 +15056,11 @@ _time (12-тизначный формат)
     <type>org.apache.nifi.processors.standard.UpdateRecord</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>Copy of Process spark logs</name>
                             <variables/>
                         </processGroups>
@@ -14478,7 +15537,7 @@ _time (12-тизначный формат)
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -14564,7 +15623,7 @@ _time (12-тизначный формат)
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -14650,7 +15709,7 @@ _time (12-тизначный формат)
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -14752,7 +15811,7 @@ ${_bucket_period:toLower():replaceAll('[^a-z]',''):startsWith('d'):ifElse(86400,
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -14820,7 +15879,7 @@ ${_bucket_period:toLower():replaceAll('[^a-z]',''):startsWith('d'):ifElse(86400,
     <bundle>
         <artifact>nifi-update-attribute-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -14906,7 +15965,7 @@ ${_bucket_period:toLower():replaceAll('[^a-z]',''):startsWith('d'):ifElse(86400,
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -15255,7 +16314,7 @@ ${_bucket_period:toLower():replaceAll('[^a-z]',''):startsWith('d'):ifElse(86400,
         <autoTerminate>false</autoTerminate>
         <name>success</name>
     </relationships>
-    <state>RUNNING</state>
+    <state>STOPPED</state>
     <style/>
     <type>ru.ot.etl.processors.nifi.PutParquetNoAvro</type>
 </processors>
@@ -15269,7 +16328,7 @@ ${_bucket_period:toLower():replaceAll('[^a-z]',''):startsWith('d'):ifElse(86400,
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -15353,7 +16412,7 @@ ${_bucket_period:toLower():replaceAll('[^a-z]',''):startsWith('d'):ifElse(86400,
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -15589,6 +16648,11 @@ multiply(3600)}</value>
     <type>ru.ot.dmr.processors.MergeRecordNoAvro</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>WriteToIndex</name>
                             <variables>
 <entry>
@@ -15829,7 +16893,7 @@ multiply(3600)}</value>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -15913,7 +16977,7 @@ multiply(3600)}</value>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -15998,6 +17062,11 @@ multiply(3600)}</value>
     <type>org.apache.nifi.processors.standard.UpdateRecord</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>Process spark logs</name>
                             <variables/>
                         </processGroups>
@@ -16145,7 +17214,7 @@ multiply(3600)}</value>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -16303,7 +17372,7 @@ multiply(3600)}</value>
     <bundle>
         <artifact>nifi-standard-nar</artifact>
         <group>org.apache.nifi</group>
-        <version>1.11.1</version>
+        <version>1.15.1</version>
     </bundle>
     <config>
         <bulletinLevel>WARN</bulletinLevel>
@@ -16378,6 +17447,11 @@ multiply(3600)}</value>
     <type>org.apache.nifi.processors.standard.UpdateRecord</type>
 </processors>
                             </contents>
+                            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                             <name>Process glusterfs logs</name>
                             <variables/>
                         </processGroups>
@@ -16391,7 +17465,7 @@ multiply(3600)}</value>
                             <bundle>
 <artifact>nifi-standard-nar</artifact>
 <group>org.apache.nifi</group>
-<version>1.11.1</version>
+<version>1.15.1</version>
                             </bundle>
                             <config>
 <bulletinLevel>WARN</bulletinLevel>
@@ -16515,7 +17589,7 @@ multiply(3600)}</value>
                             <bundle>
 <artifact>nifi-standard-nar</artifact>
 <group>org.apache.nifi</group>
-<version>1.11.1</version>
+<version>1.15.1</version>
                             </bundle>
                             <config>
 <bulletinLevel>WARN</bulletinLevel>
@@ -16779,7 +17853,7 @@ multiply(3600)}</value>
                             <bundle>
 <artifact>nifi-standard-nar</artifact>
 <group>org.apache.nifi</group>
-<version>1.11.1</version>
+<version>1.15.1</version>
                             </bundle>
                             <config>
 <bulletinLevel>WARN</bulletinLevel>
@@ -16847,7 +17921,7 @@ multiply(3600)}</value>
                             <bundle>
 <artifact>nifi-standard-nar</artifact>
 <group>org.apache.nifi</group>
-<version>1.11.1</version>
+<version>1.15.1</version>
                             </bundle>
                             <config>
 <bulletinLevel>WARN</bulletinLevel>
@@ -16932,13 +18006,23 @@ multiply(3600)}</value>
                             <type>org.apache.nifi.processors.standard.SplitText</type>
                         </processors>
                     </contents>
+                    <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+                    <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+                    <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+                    <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+                    <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
                     <name>ingest_platform_logs</name>
                     <variables/>
                 </processGroups>
             </contents>
+            <defaultBackPressureDataSizeThreshold>1 GB</defaultBackPressureDataSizeThreshold>
+            <defaultBackPressureObjectThreshold>10000</defaultBackPressureObjectThreshold>
+            <defaultFlowFileExpiration>0 sec</defaultFlowFileExpiration>
+            <flowfileConcurrency>UNBOUNDED</flowfileConcurrency>
+            <flowfileOutboundPolicy>STREAM_WHEN_AVAILABLE</flowfileOutboundPolicy>
             <name>Logs processing</name>
             <variables/>
         </processGroups>
     </snippet>
-    <timestamp>11/15/2021 15:44:03 MSK</timestamp>
+    <timestamp>12/22/2021 13:23:40 MSK</timestamp>
 </template>
