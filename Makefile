@@ -9,7 +9,7 @@ endef
 
 PROJECT_NAME = monitoring
 
-GENERATE_VERSION = 1.0.6
+GENERATE_VERSION = 1.0.7
 GENERATE_BRANCH = $(shell git name-rev $$(git rev-parse HEAD) | cut -d\  -f2 | sed -re 's/^(remotes\/)?origin\///' | tr '/' '_')
 
 SET_VERSION = $(eval VERSION=$(GENERATE_VERSION))
